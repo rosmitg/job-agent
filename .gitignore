@@ -1,0 +1,13 @@
+.env
+.env.local
+venv/
+__pycache__/
+*.pyc
+.Python
+data/profile.json
+data/applications/
+.vscode/
+.idea/
+.DS_Store
+storage/
+*.log
