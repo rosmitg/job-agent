@@ -11,3 +11,4 @@ data/applications/
 .DS_Store
 storage/
 *.log
+output_resume.*
