@@ -1,0 +1,297 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[
+  a4paper,
+  left=0.52in,
+  right=0.52in,
+  top=0.34in,
+  bottom=0.34in
+]{geometry}
+
+\usepackage{latexsym}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\urlstyle{same}
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+\titleformat{\section}
+  {\vspace{-4pt}\scshape\raggedright\normalsize\bfseries}
+  {}{0em}{}
+  [\color{black}\titlerule \vspace{-6pt}]
+
+\pdfgentounicode=1
+
+\newcommand{\resumeItem}[1]{
+  \item\small{{#1 \vspace{-2pt}}}
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{@{\extracolsep{\fill}}lr}
+      \textbf{#1} & \textbf{\small #2} \\
+      \textit{\small #3} & \textit{\small #4} \\
+    \end{tabular*}
+    \vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+  \item
+    \begin{tabular*}{0.97\textwidth}{@{\extracolsep{\fill}}lr}
+      \small #1 & #2 \\
+    \end{tabular*}
+    \vspace{-3pt}
+}
+
+\newcommand{\resumeSubHeadingListStart}{
+  \begin{itemize}[leftmargin=0.15in,label={}]
+}
+
+\newcommand{\resumeSubHeadingListEnd}{
+  \end{itemize}
+}
+
+\newcommand{\resumeItemListStart}{
+  \begin{itemize}[leftmargin=0.20in,itemsep=0.5pt,topsep=1.5pt]
+}
+
+\newcommand{\resumeItemListEnd}{
+  \end{itemize}\vspace{1pt}
+}
+
+\begin{document}
+
+%=========================================================
+% HEADER
+%=========================================================
+
+\begin{center}
+    {\LARGE \scshape Rosmit Gyawali} \\ \vspace{2pt}
+    \small
+    AI Engineer \textbullet\ Python \textbullet\ LangChain \textbullet\ LLM Systems
+    \\ \vspace{3pt}
+    Sydney, Australia \textbullet\ Australian Work Rights
+    \ $|$\ \href{mailto:rosmit000@gmail.com}{rosmit000@gmail.com}
+    \ $|$\ +61 403 960 903
+    \ $|$\ \href{https://linkedin.com/in/rosmitg}{LinkedIn}
+    \ $|$\ \href{https://github.com/rosmitg}{GitHub}
+    \ $|$\ \href{https://rosmit.com.au}{Portfolio}
+\end{center}
+
+\vspace{-9pt}
+
+%=========================================================
+% SUMMARY
+%=========================================================
+
+\section{Summary}
+
+\small{
+Aspiring AI Engineer with hands-on experience building production LLM systems using Python, LangChain, and
+Docker containerization. Skilled in RAG pipelines, prompt engineering, and AI output evaluation with disciplined
+validation practices. Brings practical expertise in production deployments, CI/CD quality gates, and end-to-end
+system ownership across cloud platforms.
+}
+
+\vspace{-2pt}
+
+%=========================================================
+% TECHNICAL SKILLS
+%=========================================================
+
+\section{Technical Skills}
+
+\begin{itemize}[leftmargin=0.15in,label={}]
+\small{\item{
+
+    \textbf{Programming Languages:}
+    Python, SQL
+    \\[1pt]
+
+    \textbf{AI \& LLM Frameworks:}
+    LangChain, LlamaIndex, Claude API, Codex, RAG pipelines, prompt engineering,
+    LLM evaluation, LLM-as-judge, agent workflows, tool calling
+    \\[1pt]
+
+    \textbf{Cloud \& DevOps:}
+    Docker containerization, GCP Cloud Run, GitHub Actions, CI/CD pipelines,
+    REST APIs, PostgreSQL, observability
+    \\[1pt]
+
+    \textbf{ML Libraries \& Tools:}
+    PyTorch, Scikit-learn, Hugging Face, RAGAS, LangSmith, DSPy, FastAPI,
+    Pandas, NumPy
+    \\[1pt]
+
+    \textbf{Automation \& Engineering:}
+    Git, GitHub, Selenium, Scrapy, ETL pipelines, AI-assisted code review,
+    automated testing, schema validation
+
+}}
+\end{itemize}
+
+%=========================================================
+% PROFESSIONAL EXPERIENCE
+%=========================================================
+
+\section{Professional Experience}
+
+\resumeSubHeadingListStart
+
+    %---------- WESTERN SYDNEY UNIVERSITY ----------
+
+    \resumeSubheading
+      {Western Sydney University}
+      {2024 -- 2025}
+      {Data Science Research Fellow}
+      {Sydney, NSW}
+
+      \resumeItemListStart
+
+        \resumeItem{
+        Designed and ran reproducible PyTorch experiments comparing neural-network
+        training approaches on CIFAR-10 and CIFAR-100 using GPU/HPC infrastructure
+        and SLURM — evaluated accuracy, runtime, memory, and compute behaviour.
+        }
+
+        \resumeItem{
+        Documented all experimental configurations, results, and findings in
+        structured reports for supervisor review and reproducibility.
+        }
+
+      \resumeItemListEnd
+
+    %---------- STUDY INFO CENTRE ----------
+
+    \resumeSubheading
+      {Study Info Centre}
+      {2020 -- 2022}
+      {Data Scraper / Python Developer}
+      {Sydney, NSW}
+
+      \resumeItemListStart
+
+        \resumeItem{
+        Built and maintained automated data collection workflows using Python,
+        Selenium, and Scrapy across 10+ sources — replacing manual processes with
+        reliable repeatable pipelines.
+        }
+
+        \resumeItem{
+        Developed ETL pipelines with schema validation and anomaly detection using
+        Python, SQL, and PostgreSQL — identified and resolved data quality issues
+        end-to-end.
+        }
+
+      \resumeItemListEnd
+
+\resumeSubHeadingListEnd
+
+%=========================================================
+% PROJECTS
+%=========================================================
+
+\section{Selected Engineering Projects}
+
+\resumeSubHeadingListStart
+
+    %---------- FINANCIAL DOCUMENT INTELLIGENCE ----------
+
+    \resumeProjectHeading
+      {\textbf{Financial Document Intelligence}
+      $|$
+      \emph{Python, LangChain, LlamaIndex, Docker, FastAPI, PostgreSQL}
+      $|$
+      \href{https://github.com/rosmitg/financial-doc-intelligence}{\underline{GitHub}}}
+      {}
+
+      \resumeItemListStart
+
+        \resumeItem{
+        Built a production-oriented RAG system using LangChain and LlamaIndex with
+        hybrid retrieval, role-based access control enforced at SQL level, and
+        containerized with Docker for cloud deployment.
+        }
+
+        \resumeItem{
+        Implemented automated RAGAS evaluation suite integrated with GitHub Actions
+        CI/CD pipeline — quality gates block deployments when faithfulness or
+        precision metrics drop. \textbf{Result: faithfulness 0.955, context precision 0.900.}
+        }
+
+        \resumeItem{
+        Traced system execution with LangSmith for observability and performance
+        monitoring across production workloads.
+        }
+
+      \resumeItemListEnd
+
+    \vspace{2pt}
+
+    %---------- EMAIL REGRESSION DETECTOR ----------
+
+    \resumeProjectHeading
+      {\textbf{Email Regression Detector}
+      $|$
+      \emph{Python, PostgreSQL, Claude API, GitHub Actions}
+      $|$
+      \href{https://github.com/rosmitg/email-regression-detector}{\underline{GitHub}}}
+      {}
+
+      \resumeItemListStart
+
+        \resumeItem{
+        Built an automated AI output evaluation pipeline — ran 50 hand-labelled
+        test cases through a classifier, scored outputs with LLM-as-judge, and
+        detected case-level regressions before release.
+        }
+
+        \resumeItem{
+        Integrated GitHub Actions quality gates with warning and blocking thresholds,
+        Slack alerts, and HTML diff reports confirming expected behaviour before
+        and after changes. \textbf{Result: 94\% accuracy, 4.88/5 judge score, \textasciitilde\$0.018 per evaluation run.}
+        }
+
+      \resumeItemListEnd
+
+\resumeSubHeadingListEnd
+
+%=========================================================
+% EDUCATION
+%=========================================================
+
+\section{Education}
+
+\resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Western Sydney University}
+      {July 2025}
+      {Bachelor of Data Science}
+      {Sydney, NSW}
+
+      \resumeItemListStart
+        \resumeItem{
+        \textbf{Dean's List}
+        }
+      \resumeItemListEnd
+
+\resumeSubHeadingListEnd
+
+\end{document}

@@ -12,7 +12,7 @@ from app.agents.evaluator import evaluate_resume
 from app.agents.revision_loop import revise_resume
 
 # ─────────────────────────────────────────
-# State — flows through every node
+# State
 # ─────────────────────────────────────────
 
 
@@ -114,39 +114,47 @@ def node_human_review(state: AgentState) -> AgentState:
     score = state.evaluation.get("subjective", {}).get("total", 0)
     print(f"Final score:  {score}/25")
     print(f"Revisions:    {state.revision_count}")
-    print(f"Filter gate:  {'PASSED' if state.filter_passed else 'FAILED'}")
 
-    with open("output_resume.md", "w") as f:
+    # Save LaTeX
+    tex_path = "output_resume.tex"
+    with open(tex_path, "w") as f:
         f.write(state.resume)
-    print("\nResume saved to output_resume.md")
-    print("Review before submitting — check all claims are honest.")
+    print(f"\nLaTeX saved to {tex_path}")
+
+    # Compile to PDF automatically
+    import subprocess
+
+    print("Compiling PDF...")
+    result = subprocess.run(
+        ["pdflatex", "-interaction=nonstopmode", tex_path],
+        capture_output=True,
+        text=True,
+    )
+
+    if result.returncode == 0:
+        print("✅ PDF compiled successfully → output_resume.pdf")
+        # Open it
+        subprocess.Popen(["xdg-open", "output_resume.pdf"])
+    else:
+        print("❌ PDF compilation failed")
+        print(result.stdout[-1000:])
+
+    print("\nReview before submitting — check all claims are honest.")
     return state
 
 
 # ─────────────────────────────────────────
 # Conditional edge functions
-# Return the name of the next node
 # ─────────────────────────────────────────
 
 
 def route_filter(state: AgentState) -> str:
-    """
-    After filter_gate:
-    PASS → go to generate
-    FAIL → END (don't apply)
-    """
     if state.filter_passed:
         return "generate"
     return END
 
 
 def route_evaluation(state: AgentState) -> str:
-    """
-    After evaluate:
-    PASS → human_review
-    FAIL + revisions remaining → revise
-    FAIL + max revisions hit → human_review anyway
-    """
     passed = state.evaluation.get("passed", False)
     if passed:
         return "human_review"
@@ -164,7 +172,6 @@ def route_evaluation(state: AgentState) -> str:
 def build_graph():
     graph = StateGraph(AgentState)
 
-    # Add nodes
     graph.add_node("parse_jd", node_parse_jd)
     graph.add_node("match_evidence", node_match_evidence)
     graph.add_node("filter_gate", node_filter_gate)
@@ -173,17 +180,14 @@ def build_graph():
     graph.add_node("revise", node_revise)
     graph.add_node("human_review", node_human_review)
 
-    # Entry point
     graph.set_entry_point("parse_jd")
 
-    # Regular edges — always execute
     graph.add_edge("parse_jd", "match_evidence")
     graph.add_edge("match_evidence", "filter_gate")
     graph.add_edge("generate", "evaluate")
     graph.add_edge("revise", "evaluate")
     graph.add_edge("human_review", END)
 
-    # Conditional edges — depends on state
     graph.add_conditional_edges(
         "filter_gate", route_filter, {"generate": "generate", END: END}
     )

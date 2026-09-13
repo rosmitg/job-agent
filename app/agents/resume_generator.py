@@ -10,19 +10,21 @@ def generate_resume(
     evidence_map: JobRequirementEvidenceMap,
     profile: CandidateProfile,
     base_resume_path: str = "data/base_resume.md",
+    template_path: str = "data/template.tex",
 ) -> str:
     """
-    Tailors the candidate's existing resume to the target JD.
-    Uses evidence map to know what to emphasise.
-    Keeps all real metrics and achievements.
-    Never invents new experience.
+    Generates a tailored LaTeX resume.
+    Uses the candidate's LaTeX template as structure.
+    Tailors content based on evidence map.
+    Every bullet grounded in real evidence.
     """
 
-    # Read base resume
     with open(base_resume_path) as f:
         base_resume = f.read()
 
-    # Build evidence summary
+    with open(template_path) as f:
+        template = f.read()
+
     evidence_summary = "\n".join(
         [
             f"REQUIREMENT: {m.requirement.text} "
@@ -34,64 +36,75 @@ def generate_resume(
         ]
     )
 
-    # Project GitHub URLs
     project_urls = "\n".join(
         [f"{p.name}: {p.github_url or 'no url'}" for p in profile.projects]
     )
 
-    # Extract JD keywords for ATS
     all_keywords = []
     for m in evidence_map.matches:
         all_keywords.extend(m.requirement.keywords)
     keywords_str = ", ".join(set(all_keywords))
 
     prompt = f"""
-You are an expert resume writer helping tailor a resume for a specific job.
+You are an expert resume writer and LaTeX specialist.
+
+You have a candidate's LaTeX resume template and their base resume content.
+Your job is to tailor the LaTeX resume for a specific role.
 
 TARGET ROLE: {evidence_map.job_title} at {evidence_map.company}
 
-CANDIDATE'S EXISTING RESUME:
+LATEX TEMPLATE (use this exact structure and commands):
+{template}
+
+BASE RESUME CONTENT (use this as the source of truth):
 {base_resume}
 
-EVIDENCE MAP — what matches this JD:
+EVIDENCE MAP (what matches this JD — use this to prioritise):
 {evidence_summary}
 
-ATS KEYWORDS TO WEAVE IN NATURALLY: {keywords_str}
+ATS KEYWORDS TO WEAVE IN: {keywords_str}
 
-PROJECT GITHUB URLS (use these exactly in project sections):
+PROJECT GITHUB URLS:
 {project_urls}
 
-YOUR TASK:
-Tailor the existing resume for this specific role.
-
-RULES:
-1. Keep all real metrics EXACTLY as written
-   (94% accuracy, faithfulness 0.955, $0.018 per run etc.)
-2. Rewrite the summary to mention the target role
-   and company domain specifically
-3. Reorder projects — strongest match to this JD first
-4. Weave JD keywords into bullets where they fit naturally
-   Do not keyword stuff — it must read naturally
-5. Keep all real experience — do not remove anything
-6. Do NOT invent new achievements or metrics
-7. Every bullet must come from the existing resume
-8. Emphasise experience most relevant to this JD
-9. Use exact GitHub URLs provided above for each project
-10. Return clean Markdown only
-    No explanation, no commentary
-
-TAILORING FOCUS:
-- Requirements with high confidence → emphasise these
-- Requirements with gaps → do not make up evidence
-- Must-have requirements → ensure they appear prominently
-
-Return the complete tailored resume in Markdown.
+TAILORING RULES:
+1. Keep the EXACT LaTeX structure and custom commands
+2. Rewrite summary to target this specific role
+   Keep "Aspiring AI Engineer" framing
+3. SELECT ONLY 2 PROJECTS maximum
+   Choose the 2 most relevant to this JD
+   based on the evidence map confidence scores
+4. Weave JD keywords into bullets naturally
+5. Keep ALL real metrics exactly as written
+6. Do NOT invent new achievements
+7. Every bullet must come from the base resume
+8. Use exact GitHub URLs provided
+9. Escape special LaTeX characters:
+   & → \\&   % → \\%   $ → \\$
+10. CRITICAL — ONE PAGE ONLY:
+    Maximum 2 projects
+    Maximum 3 bullets per experience role
+    Maximum 3 bullets per project
+    Keep summary under 3 lines
+    If content is too long cut bullets not sections
+11. Return ONLY valid LaTeX
+    Start with \\documentclass
+    End with \\end{{document}}
 """
 
     response = client.messages.create(
         model="claude-haiku-4-5-20251001",
-        max_tokens=4096,
+        max_tokens=8096,
         messages=[{"role": "user", "content": prompt}],
     )
 
-    return response.content[0].text.strip()
+    content = response.content[0].text.strip()
+
+    # Strip markdown fences if Claude wraps in ```latex
+    if content.startswith("```"):
+        content = content.split("```")[1]
+        if content.startswith("latex"):
+            content = content[5:]
+        content = content.strip()
+
+    return content
