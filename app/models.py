@@ -44,3 +44,50 @@ class ParsedJD(BaseModel):
     company_description: Optional[str]
     requirements: list[JobRequirement] = []
     responsibilities: list[str] = []
+
+
+# Add these to app/models.py
+
+
+class Experience(BaseModel):
+    company: str
+    role: str
+    start_year: int
+    end_year: Optional[int] = None
+    current: bool = False
+    description: str
+    skills: list[str] = []
+    achievements: list[str] = []
+
+
+class Project(BaseModel):
+    name: str
+    description: str
+    stack: list[str] = []
+    metrics: list[str] = []
+    github_url: Optional[str] = None
+    live_url: Optional[str] = None
+    highlights: list[str] = []
+
+
+class Education(BaseModel):
+    institution: str
+    degree: str
+    field: str
+    graduation_year: int
+    achievements: list[str] = []
+
+
+class CandidateProfile(BaseModel):
+    name: str
+    email: str
+    phone: str
+    location: str
+    github_username: str
+    portfolio_url: Optional[str] = None
+    linkedin_url: Optional[str] = None
+    summary: str
+    experience: list[Experience] = []
+    projects: list[Project] = []
+    education: list[Education] = []
+    skills: list[str] = []
