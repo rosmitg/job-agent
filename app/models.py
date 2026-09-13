@@ -91,3 +91,62 @@ class CandidateProfile(BaseModel):
     projects: list[Project] = []
     education: list[Education] = []
     skills: list[str] = []
+
+
+class EvidenceMatch(BaseModel):
+    """
+    One requirement matched to candidate evidence.
+    One row in the evidence table.
+    """
+
+    requirement: JobRequirement
+    evidence: list[str] = []  # what specifically supports this
+    confidence: float = 0.0  # 0.0 to 1.0
+    gap: bool = False  # True if no evidence found
+    gap_description: Optional[str] = None  # why is there a gap
+
+
+class JobRequirementEvidenceMap(BaseModel):
+    """
+    Full map of all JD requirements to candidate evidence.
+    The whole table. Agent reads this to make decisions.
+    """
+
+    job_title: str
+    company: str
+    matches: list[EvidenceMatch] = []
+
+    @property
+    def coverage_score(self) -> float:
+        """Percentage of requirements with evidence."""
+        if not self.matches:
+            return 0.0
+        covered = sum(1 for m in self.matches if not m.gap)
+        return covered / len(self.matches)
+
+    @property
+    def must_have_coverage(self) -> float:
+        """Coverage of must-have requirements only."""
+        must_haves = [
+            m
+            for m in self.matches
+            if m.requirement.importance == RequirementImportance.MUST_HAVE
+        ]
+        if not must_haves:
+            return 1.0
+        covered = sum(1 for m in must_haves if not m.gap)
+        return covered / len(must_haves)
+
+    @property
+    def gaps(self) -> list[EvidenceMatch]:
+        """All requirements with no evidence."""
+        return [m for m in self.matches if m.gap]
+
+    @property
+    def must_have_gaps(self) -> list[EvidenceMatch]:
+        """Must-have requirements with no evidence — dealbreakers."""
+        return [
+            m
+            for m in self.matches
+            if m.gap and m.requirement.importance == RequirementImportance.MUST_HAVE
+        ]
