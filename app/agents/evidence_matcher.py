@@ -29,6 +29,8 @@ def match_evidence(
 CANDIDATE: {profile.name}
 
 SKILLS: {', '.join(profile.skills)}
+WORK RIGHTS: {profile.work_rights or 'not specified'}
+VISA STATUS: {profile.visa_status or 'not specified'}
 
 EXPERIENCE:
 {chr(10).join([

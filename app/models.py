@@ -86,6 +86,8 @@ class CandidateProfile(BaseModel):
     github_username: str
     portfolio_url: Optional[str] = None
     linkedin_url: Optional[str] = None
+    work_rights: Optional[str] = None  # ← add this
+    visa_status: Optional[str] = None
     summary: str
     experience: list[Experience] = []
     projects: list[Project] = []
